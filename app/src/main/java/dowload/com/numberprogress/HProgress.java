@@ -29,7 +29,7 @@ public class HProgress extends View {
     int hProgress_text_paddingV = 0;  //进度文字上下pading
     int hProgress_text_size = 38;  //进度文字字体大小
     int maxProgress = 100;
-    int hProgress_progress_bar=0;
+    int hProgress_progress_bar = 0;
 
     Paint outLinePaint;
     Paint progressPaint;
@@ -94,7 +94,7 @@ public class HProgress extends View {
         hProgress_text_paddingH = (int) attributes.getDimension(R.styleable.HProgress_hProgress_text_paddingH, hProgress_text_paddingH);
         hProgress_text_paddingV = (int) attributes.getDimension(R.styleable.HProgress_hProgress_text_paddingV, hProgress_text_paddingV);
         hProgress_progress_bar = attributes.getInteger(R.styleable.HProgress_hProgress_progress_bar, hProgress_progress_bar);
-        maxProgress =attributes.getInteger(R.styleable.HProgress_hProgress_maxProgress, maxProgress);
+        maxProgress = attributes.getInteger(R.styleable.HProgress_hProgress_maxProgress, maxProgress);
 
     }
 
@@ -117,7 +117,7 @@ public class HProgress extends View {
         int w = rect.width();
         int h = rect.height();
 
-        int moveX = hProgress_circle_height / 2 + (progressWidth - hProgress_circle_height) * getProgress() / 100;
+        int moveX = hProgress_circle_height / 2 + (progressWidth - hProgress_circle_height) * getProgress() / maxProgress;
         int startX;
         int endX;
         if (moveX - w / 2 - hProgress_text_paddingH < 0) {
@@ -136,7 +136,7 @@ public class HProgress extends View {
                 hProgress_circle_height,
                 endX,
                 hProgress_circle_height + hProgress_text_height);
-        canvas.drawRoundRect(rectF2, hProgress_text_height / 2,hProgress_text_height/ 2, textBgPain);
+        canvas.drawRoundRect(rectF2, hProgress_text_height / 2, hProgress_text_height / 2, textBgPain);
 
 
         Paint.FontMetrics fontMetrics = textPain.getFontMetrics();
@@ -157,7 +157,7 @@ public class HProgress extends View {
         //画progressBar 内进度条
         RectF rectF1 = new RectF(hProgress_circle_height / 2 + spaceB,
                 spaceA + spaceB,
-                hProgress_bar_height + spaceB + (progressWidth - spaceA - spaceB) * getProgress() / 100,
+                hProgress_bar_height + spaceB + (progressWidth - spaceA - spaceB) * getProgress() / maxProgress,
                 hProgress_bar_height + spaceB + spaceA);
 
         canvas.drawRoundRect(rectF1, hProgress_bar_height / 2, hProgress_bar_height / 2, progressPaint);
@@ -177,11 +177,12 @@ public class HProgress extends View {
 
     public void setProgress(int progress) {
         if (progress > maxProgress) {
-            progress=maxProgress;
+            throw new RuntimeException("progress mast less than  maxProgress");
         }
         hProgress_progress_bar = progress;
         postInvalidate();
     }
+
     public void setMaxProgress(int maxProgress) {
         this.maxProgress = maxProgress;
     }
